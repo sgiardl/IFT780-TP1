@@ -86,13 +86,16 @@ def hinge_naive_forward_backward(X, W, y, reg):
     """
     loss = 0.0
     dW = np.zeros(W.shape)
+    n = X.shape[0]
 
     ### TODO ###
-    # Ajouter code ici #
-    for i in range(X.shape[0]):
-        preds = np.dot(X, W)   # 1 x C Numpy array with classes prediction
+    for i in range(n):
+        preds = np.dot(X[i:i+1, :], W)   # 1 x C Numpy array with classes prediction
         arg_max = np.argmax(preds)
         loss += max(0, 1+preds[0, arg_max]-preds[0, y[i]])
+
+    # We take the mean per observation and add regularization
+    loss = loss/n + 0.5*reg*np.linalg.norm(W, ord=2)
 
     return loss, dW
 
