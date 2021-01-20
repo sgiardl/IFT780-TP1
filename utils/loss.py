@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def softmax_ce_naive_forward_backward(X, W, y, reg):
     """Implémentation naive qui calcule la propagation avant, puis la
        propagation arrière pour finalement retourner la perte entropie croisée
@@ -90,6 +89,10 @@ def hinge_naive_forward_backward(X, W, y, reg):
 
     ### TODO ###
     # Ajouter code ici #
+    for i in range(X.shape[0]):
+        preds = np.dot(X, W)   # 1 x C Numpy array with classes prediction
+        arg_max = np.argmax(preds)
+        loss += max(0, 1+preds[0, arg_max]-preds[0, y[i]])
 
     return loss, dW
 
