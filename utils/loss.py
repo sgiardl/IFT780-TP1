@@ -90,12 +90,27 @@ def hinge_naive_forward_backward(X, W, y, reg):
 
     ### TODO ###
     for i in range(n):
-        preds = np.dot(X[i:i+1, :], W)   # 1 x C Numpy array with classes prediction
+
+        # We compute the predictions for each class (1 x C Numpy array)
+        preds = np.dot(X[i:i+1, :], W)
+
+        # We save the class with the highest score and the ground truth
         arg_max = np.argmax(preds)
-        loss += max(0, 1+preds[0, arg_max]-preds[0, y[i]])
+        ground_truth = y[i]
+
+        # We compute the loss
+        loss += max(0, 1+preds[0, arg_max]-preds[0, ground_truth])
+
+        # We update the gradients (Columns of W in this case)
+        if arg_max != ground_truth:
+            dW[:, arg_max:arg_max+1] += X[i:i+1, :].T
+            dW[:, ground_truth:ground_truth+1] -= X[i:i+1, :].T
 
     # We take the mean per observation and add regularization
     loss = loss/n + 0.5*reg*np.linalg.norm(W, ord=2)
+
+    # We take the mean of the gradient and add the gradients with respect to the regularization
+    dW = dW/n + reg*W
 
     return loss, dW
 
