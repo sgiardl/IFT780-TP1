@@ -88,7 +88,6 @@ def hinge_naive_forward_backward(X, W, y, reg):
     dW = np.zeros(W.shape)
     n = X.shape[0]
 
-    ### TODO ###
     for i in range(n):
 
         # We compute the predictions for each class (1 x C Numpy array)
@@ -135,23 +134,21 @@ def hinge_forward_backward(X, W, y, reg):
     - dW: Numpy array, shape (D, C). Gradients des poids W
     """
 
-    # We compute the predictions for each class (n x C Numpy array)
-    preds = np.dot(X, W)
+    # We compute the predictions for each class (N x C Numpy array)
+    preds = X.dot(W)
 
-    # We stack one hot encodings for arg_max and ground_truth
-    arg_max = np.eye(10)[np.argmax(preds, axis=1)]  # (n x 10 Numpy array)
-    ground_truth = np.eye(10)[y]                    # (n x 10 Numpy array)
+    # We stack one hot encodings for arg_max and ground_truth and take their differences
+    arg_max = np.eye(10)[np.argmax(preds, axis=1)]   # (N x C Numpy array)
+    ground_truth = np.eye(10)[y]                     # (N x C Numpy array)
+    one_hot_diff = arg_max - ground_truth            # (N x C Numpy array)
 
     # We compute gradients
-    dW = (np.dot(X.T, arg_max)-np.dot(X.T, ground_truth))/X.shape[0] + reg*W
-
-    # We multiply preds element-wise with the differences of argmax and ground truth
-    preds *= (arg_max - ground_truth)               # (n x 10 Numpy array)
+    dW = X.T.dot(one_hot_diff)/X.shape[0] + reg*W    # (D x C Numpy array)
 
     # We compute the differences between max prediction and ground truth prediction for all elements
-    diff = np.dot(preds, np.ones((10, 1)))          # (n x 1 Numpy array)
+    preds_diff = (preds * one_hot_diff).sum(axis=1)  # (N x 1 Numpy array)
 
     # We compute the mean of the loss
-    loss = np.maximum(0, 1+diff).mean() + 0.5*reg*pow(np.linalg.norm(W), 2)
+    loss = np.maximum(0, 1+preds_diff).mean() + 0.5*reg*pow(np.linalg.norm(W), 2)
 
     return loss, dW
