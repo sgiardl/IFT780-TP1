@@ -138,6 +138,23 @@ def hinge_forward_backward(X, W, y, reg):
     dW = np.zeros(W.shape)
 
     ### TODO ###
-    # Ajouter code ici #
+    # We compute the predictions for each class (1 x C Numpy array)
+    preds = np.dot(X, W)
+
+    # We stack one hot encodings for arg_max and ground_truth
+    arg_max = np.eye(10)[np.argmax(preds, axis=1)]
+    ground_truth = np.eye(10)[y]
+
+    # We multiply preds element-wise with the differences of argmax and ground truth
+    preds *= (arg_max - ground_truth)
+
+    # We compute the differences between max prediction and ground truth prediction for all elements
+    diff = np.sum(preds, axis=1)
+
+    # We compute the losses
+    losses = np.maximum(0, 1+diff)
+
+    # We compute the mean of the losses
+    loss = np.mean(losses)
 
     return loss, dW
