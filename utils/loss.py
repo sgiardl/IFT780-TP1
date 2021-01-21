@@ -106,8 +106,8 @@ def hinge_naive_forward_backward(X, W, y, reg):
             dW[:, arg_max:arg_max+1] += X[i:i+1, :].T
             dW[:, ground_truth:ground_truth+1] -= X[i:i+1, :].T
 
-    # We take the mean per observation and add regularization
-    loss = loss/n + 0.5*reg*np.linalg.norm(W, ord=2)
+    # We take the mean per observation and add regularization (Squared of Frobenius Norm)
+    loss = loss/n + 0.5*reg*pow(np.linalg.norm(W), 2)
 
     # We take the mean of the gradient and add the gradients with respect to the regularization
     dW = dW/n + reg*W
