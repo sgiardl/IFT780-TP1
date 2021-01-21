@@ -44,7 +44,7 @@ class LinearClassifier:
             idx = np.random.choice(N, batch_size, replace=False)
 
             # We execute the forward and backward pass
-            l, dW = self.forward_backward_function(X[idx, :], self.W, y[idx], reg)
+            l, dW = self.forward_backward(X[idx, :], y[idx], reg)
 
             # We update the weights and add the loss to train_loss_history
             self.W -= learning_rate*dW
