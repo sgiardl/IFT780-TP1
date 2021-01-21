@@ -134,27 +134,24 @@ def hinge_forward_backward(X, W, y, reg):
     - loss: float. Perte du classifieur linéaire hinge
     - dW: Numpy array, shape (D, C). Gradients des poids W
     """
-    loss = 0.0
-    dW = np.zeros(W.shape)
 
-    ### TODO ###
-    # We compute the predictions for each class (1 x C Numpy array)
+    # We compute the predictions for each class (n x C Numpy array)
     preds = np.dot(X, W)
 
     # We stack one hot encodings for arg_max and ground_truth
-    arg_max = np.eye(10)[np.argmax(preds, axis=1)]
-    ground_truth = np.eye(10)[y]
+    arg_max = np.eye(10)[np.argmax(preds, axis=1)]  # (n x 10 Numpy array)
+    ground_truth = np.eye(10)[y]                    # (n x 10 Numpy array)
+
+    # We compute gradients
+    dW = (np.dot(X.T, arg_max)-np.dot(X.T, ground_truth))/X.shape[0] + reg*W
 
     # We multiply preds element-wise with the differences of argmax and ground truth
-    preds *= (arg_max - ground_truth)
+    preds *= (arg_max - ground_truth)               # (n x 10 Numpy array)
 
     # We compute the differences between max prediction and ground truth prediction for all elements
-    diff = np.sum(preds, axis=1)
+    diff = np.dot(preds, np.ones((10, 1)))          # (n x 1 Numpy array)
 
-    # We compute the losses
-    losses = np.maximum(0, 1+diff)
-
-    # We compute the mean of the losses
-    loss = np.mean(losses)
+    # We compute the mean of the loss
+    loss = np.maximum(0, 1+diff).mean() + 0.5*reg*pow(np.linalg.norm(W), 2)
 
     return loss, dW
