@@ -86,9 +86,11 @@ def hinge_naive_forward_backward(X, W, y, reg):
     """
     loss = 0.0
     dW = np.zeros(W.shape)
-    n = X.shape[0]
 
     ### TODO ###
+    # We save the number of data points
+    n = X.shape[0]
+
     for i in range(n):
 
         # We compute the predictions for each class (1 x C Numpy array)
