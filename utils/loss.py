@@ -86,6 +86,9 @@ def hinge_naive_forward_backward(X, W, y, reg):
     """
     loss = 0.0
     dW = np.zeros(W.shape)
+
+    ### TODO ###
+    # We save the number of data points
     n = X.shape[0]
 
     for i in range(n):
@@ -134,6 +137,7 @@ def hinge_forward_backward(X, W, y, reg):
     - dW: Numpy array, shape (D, C). Gradients des poids W
     """
 
+    ### TODO ###
     # We compute the predictions for each class (N x C Numpy array)
     preds = X.dot(W)
 
