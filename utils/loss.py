@@ -151,7 +151,7 @@ def hinge_forward_backward(X, W, y, reg):
     ground_truth = np.eye(C)[y]                     # (N x C Numpy array)
     one_hot_diff = arg_max - ground_truth           # (N x C Numpy array)
 
-    # We compute gradients
+    # We compute gradients and add regularization term
     dW = X.T.dot(one_hot_diff)/X.shape[0] + reg*W    # (D x C Numpy array)
 
     # We compute the differences between max prediction and ground truth prediction for all elements
