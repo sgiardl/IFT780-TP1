@@ -136,10 +136,10 @@ def hinge_forward_backward(X, W, y, reg):
     - loss: float. Perte du classifieur linéaire hinge
     - dW: Numpy array, shape (D, C). Gradients des poids W
     """
-
+    loss = 0.0
+    dW = np.zeros(W.shape)
 
     ### TODO ###
-
     # We save the number of classes
     C = W.shape[1]
 
