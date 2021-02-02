@@ -38,8 +38,8 @@ def cross_entropy_loss(scores, t, reg, model_params):
 
     # We add the regularization loss
     for layer in model_params.keys():
-        W = model_params[layer]['W']
-        loss += 0.5*reg*pow(np.linalg.norm(W), 2)
+        W, b = model_params[layer]['W'], model_params[layer]['b']
+        loss += 0.5*reg*(pow(np.linalg.norm(W), 2)+pow(np.linalg.norm(b), 2))
 
     # We compute the gradient for the score (dL_dS * dS_dScores) = -1/S * S(H -S)
     dScores = (softmax_output-H)/N
