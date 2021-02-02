@@ -94,7 +94,7 @@ def softmax_ce_forward_backward(X, W, y, reg):
     B = np.log(np.sum(S * H, axis=1))
     loss = -1 * B.mean() + 0.5 * reg * pow(np.linalg.norm(W), 2)
 
-    # We compute the gardients
+    # We compute the gradients
     dW = X.T.dot(S - H) / N + reg * W
 
     return loss, dW
