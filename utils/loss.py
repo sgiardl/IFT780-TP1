@@ -79,8 +79,23 @@ def softmax_ce_forward_backward(X, W, y, reg):
     C = W.shape[1]
     loss = 0.0
     dW = np.zeros(W.shape)
+
     ### TODO ###
     # Ajouter code ici #
+
+    # We create a matrix with one hot vector as rows
+    H = np.eye(C)[y]  # (N x C numpy array)
+
+    # We calculate prediction with softmax
+    A = np.exp(X.dot(W))  # (N x C numpy array)
+    S = A / np.sum(A, axis=1).reshape((N, 1))  # (N x C numpy array)
+
+    # We compute the loss
+    B = np.log(np.sum(S * H, axis=1))
+    loss = -1 * B.mean() + 0.5 * reg * pow(np.linalg.norm(W), 2)
+
+    # We compute the gradients
+    dW = X.T.dot(S - H) / N + reg * W
 
     return loss, dW
 
@@ -160,6 +175,8 @@ def hinge_forward_backward(X, W, y, reg):
     dW = np.zeros(W.shape)
 
     ### TODO ###
+    # Ajouter code ici #
+
     # We save the number of classes
     C = W.shape[1]
 
