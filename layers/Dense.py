@@ -85,10 +85,6 @@ class Dense:
         # We compute the gradient of the loss according to the bias
         self.db = dL_dH.sum(axis=0) + self.reg*self.b               # (1xOUT numpy array)
 
-        print(self.dW)
-        print(self.db)
-        print("\n\n")
-
         # Retourne la derivee de la couche courante par rapport à son entrée * la backProb dA
         return dA.dot(self.W.T)
 
