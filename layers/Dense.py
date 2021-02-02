@@ -83,7 +83,7 @@ class Dense:
         self.dW = dH_dW.T.dot(dL_dH)                          # (InxOUT numpy array)
 
         # We compute the gradient of the loss according to the bias
-        dH_dB = np.ones((1, self.dim_output))
+        self.db = np.ones((1, self.dim_output))
 
         # Retourne la derivee de la couche courante par rapport à son entrée * la backProb dA
         return dA.dot(self.W.T)
