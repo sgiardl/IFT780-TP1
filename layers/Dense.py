@@ -77,13 +77,17 @@ class Dense:
         # TODO
 
         # We compute gradient of the loss according to W
-        dA_dH = self.activation['backward'](self.cache['H'])                        # (NxOUT numpy array)
-        dH_dW = self.cache['X']                                                     # (NxIN numpy array)
-        dL_dH = dA * dA_dH                                                          # (NxOUT numpy array)
-        self.dW = dH_dW.T.dot(dL_dH) + 0.5*self.reg*pow(np.linalg.norm(self.W), 2)  # (InxOUT numpy array)
+        dA_dH = self.activation['backward'](self.cache['H'])        # (NxOUT numpy array)
+        dH_dW = self.cache['X']                                     # (NxIN numpy array)
+        dL_dH = dA * dA_dH                                          # (NxOUT numpy array)
+        self.dW = dH_dW.T.dot(dL_dH) + self.reg*self.W              # (InxOUT numpy array)
 
         # We compute the gradient of the loss according to the bias
-        self.db = np.ones((1, self.dim_output)) + 0.5*self.reg*pow(np.linalg.norm(self.b), 2)
+        self.db = dL_dH.sum(axis=0) + self.reg*self.b               # (1xOUT numpy array)
+
+        print(self.dW)
+        print(self.db)
+        print("\n\n")
 
         # Retourne la derivee de la couche courante par rapport à son entrée * la backProb dA
         return dA.dot(self.W.T)
